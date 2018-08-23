@@ -1,5 +1,7 @@
 {
   "name": "jogging_buddy",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }
