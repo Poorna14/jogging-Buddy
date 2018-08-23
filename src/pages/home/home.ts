@@ -62,7 +62,7 @@ export class HomePage {
 
   redrawPath(path){
     if(this.currentMapTrack){
-      this.currentMapTrack.setMap(null);
+      this.currentMapTrack=null;
     }
 
     if(path.length>1){
@@ -84,7 +84,7 @@ export class HomePage {
     this.storage.set('routes',this.previousTracks);
     this.isTracking=false;
     this.positionSubscription.unsubscribe();
-    // this.currentMapTrack.setMap(null);
+    this.currentMapTrack=null;
   }
 
   showHistoryRoute(route){
