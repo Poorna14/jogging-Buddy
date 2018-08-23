@@ -18,8 +18,8 @@
 
   <ion-list>
     <ion-list-header text-center="">Previous Jogs</ion-list-header>
-    <ion-item *ngFor="let route of previousJogs">
-      {{ route.finished|date}},{{route.path.length}} Waypoints
+    <ion-item *ngFor="let route of previousTracks">
+      {{ route.finished|date}}, Distance {{route.distance}}
       <button ion-button clear item-end (click)="showHistoryRoute(route.path)">View Route</button>
     </ion-item>
   </ion-list>

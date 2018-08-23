@@ -22,6 +22,7 @@ export class HomePage {
   isTracking =false;
   trackedRoute=[];
   previousTracks=[];
+  distance=0;
 
   positionSubscription: Subscription;
 
@@ -47,9 +48,10 @@ export class HomePage {
   startTracking(){
     this.isTracking=true;
     this.trackedRoute=[];
+    this.distance=0;
 
     this.positionSubscription = this.geo.watchPosition().pipe(
-      filter(p => p.coords !== undefined)
+      filter((p) => p.coords !== undefined)
     ).subscribe(data =>{
       setTimeout(()=>{
         this.trackedRoute.push({lat:data.coords.latitude,lng:data.coords.longitude});
@@ -71,19 +73,18 @@ export class HomePage {
         strokeOpacity: 1.0,
         strokeWeight:3
       });
-
+      this.distance+= path.length;
       this.currentMapTrack.setMap(this.map);
     }
   }
 
   stopTracking(){
-    let newRoute ={finished:new Date().getTime(), path: this.trackedRoute};
+    let newRoute ={finished:new Date().getTime(), path: this.trackedRoute, distance:this.distance};
     this.previousTracks.push(newRoute);
     this.storage.set('routes',this.previousTracks);
-
     this.isTracking=false;
     this.positionSubscription.unsubscribe();
-    this.currentMapTrack.setMap(null);
+    // this.currentMapTrack.setMap(null);
   }
 
   showHistoryRoute(route){
