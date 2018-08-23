@@ -84,5 +84,9 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+      <string>This App wants to track your jogging route</string>
+    </edit-config>
     <engine name="android" spec="^7.1.1" />
+    <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
 </widget>

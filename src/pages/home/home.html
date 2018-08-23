@@ -6,4 +6,23 @@
 
 <ion-content class="home">
   <div #map id="map"></div>
+
+    <button ion-button full icon-left (click)="startTracking()" *ngIf="!isTracking">
+      <ion-icon name="locate"></ion-icon>
+      Start Tracking
+    </button>
+    <button ion-button full icon-left (click)="stopTracking()" *ngIf="isTracking">
+      <ion-icon name="hand"></ion-icon>
+      Stop Tracking
+    </button>
+
+  <ion-list>
+    <ion-list-header text-center="">Previous Jogs</ion-list-header>
+    <ion-item *ngFor="let route of previousJogs">
+      {{ route.finished|date}},{{route.path.length}} Waypoints
+      <button ion-button clear item-end (click)="showHistoryRoute(route.path)">View Route</button>
+    </ion-item>
+  </ion-list>
+
+
 </ion-content>

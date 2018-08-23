@@ -1,8 +1,11 @@
 import {Component,ViewChild,ElementRef} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, Platform, AlertController} from 'ionic-angular';
 import {Geolocation} from '@ionic-native/geolocation';
+import {Subscription} from "rxjs/Subscription";
+import {Storage} from '@ionic/storage';
+import {filter} from 'rxjs/operators';
 
-declare let google:any;
+declare var google:any;
 
 @Component({
   selector: 'page-home',
@@ -10,35 +13,106 @@ declare let google:any;
 })
 
 export class HomePage {
+@ViewChild('map') mapRef:ElementRef;
   lat:any;
   lng:any;
-@ViewChild('map') mapRef:ElementRef;
+  map:any;
+  currentMapTrack = null;
 
-  constructor(public navCtrl: NavController,public geo: Geolocation) {
+  isTracking =false;
+  trackedRoute=[];
+  previousTrackes=[];
+
+  positionSubscription: Subscription;
+
+  constructor(public navCtrl: NavController,private plt: Platform,public geo: Geolocation
+    , private storage: Storage, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad(){
-    this.geo.getCurrentPosition().then( pos =>{
-      this.lat=pos.coords.latitude;
-      this.lng=pos.coords.longitude;
+    this.plt.ready().then(() =>{
+      this.loadHistoricRoutes();
       this.showMap();
-    }).catch(err => console.log(err))
+  });
+  }
+
+  loadHistoricRoutes(){
+    this.storage.get('routes').then(data =>{
+      if(data){
+        this.previousTrackes =data;
+      }
+    });
+  }
+
+  startTracking(){
+    this.isTracking=true;
+    this.trackedRoute=[];
+
+    this.positionSubscription = this.geo.watchPosition().pipe(
+      filter(p => p.coords !== undefined)
+    ).subscribe(data =>{
+      setTimeout(()=>{
+        this.trackedRoute.push({lat:data.coords.latitude,lng:data.coords.longitude});
+        this.redrawPath(this.trackedRoute);
+      });
+      })
+  }
+
+  redrawPath(path){
+    if(this.currentMapTrack){
+      this.currentMapTrack.setMap(null);
+    }
+
+    if(path.length>1){
+      this.currentMapTrack = new google.maps.Polyline({
+        path: path,
+        geodesic:true,
+        strokeColor:'#ff00ff',
+        strokeOpacity: 1.0,
+        strokeWeight:3
+      });
+
+      this.currentMapTrack.setMap(this.map);
+    }
+  }
+
+  stopTracking(){
+    let newRoute ={finished:new Date().getTime(), path: this.trackedRoute};
+    this.previousTrackes.push(newRoute);
+    this.storage.set('routes',this.previousTrackes);
+
+    this.isTracking=false;
+    this.positionSubscription.unsubscribe();
+    this.currentMapTrack.setMap(null);
+  }
+
+  showHistoryRoute(route){
+    this.redrawPath(route);
   }
 
   showMap(){
-  	const location = new google.maps.LatLng(this.lat,this.lng);
 
+  	// const location = new google.maps.LatLng(this.lat,this.lng);
   	const options = {
   		timeout: 20000,
-		enableHighAccuracy: true,
-  		center:location,
+		  enableHighAccuracy: true,
+  		// center:location,
   		zoom :16,
-  		mapTypeId: google.maps.MapTypeId.ROADMAP
+  		mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl:false,
+      streetViewControl:false,
+      fullscreenControl:false
   	}
 
-  	const map = new google.maps.Map(this.mapRef.nativeElement,options);
+    this.map = new google.maps.Map(this.mapRef.nativeElement,options);
 
-    this.addMarker(location, map)
+    this.geo.getCurrentPosition().then( pos =>{
+      let latLng=new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+      this.map.setCenter(latLng);
+    }).catch(err => console.log(err));
+
+    //this.addMarker(this.map.getLocation(), this.map);
+
   }
 
   addMarker(position,map){
