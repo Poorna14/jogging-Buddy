@@ -19,12 +19,11 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-  	this.showMap();
-  	this.geo.getCurrentPosition().then( pos =>{
-  		this.lat=pos.coords.latitude;
-  		this.lng=pos.coords.longitude;
-  	}).catch(err => console.log(err))
-
+    this.geo.getCurrentPosition().then( pos =>{
+      this.lat=pos.coords.latitude;
+      this.lng=pos.coords.longitude;
+      this.showMap();
+    }).catch(err => console.log(err))
   }
 
   showMap(){
@@ -34,7 +33,7 @@ export class HomePage {
   		timeout: 20000,
 		enableHighAccuracy: true,
   		center:location,
-  		zoom :20,
+  		zoom :16,
   		mapTypeId: google.maps.MapTypeId.ROADMAP
   	}
 
