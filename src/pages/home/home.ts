@@ -21,7 +21,7 @@ export class HomePage {
 
   isTracking =false;
   trackedRoute=[];
-  previousTrackes=[];
+  previousTracks=[];
 
   positionSubscription: Subscription;
 
@@ -39,7 +39,7 @@ export class HomePage {
   loadHistoricRoutes(){
     this.storage.get('routes').then(data =>{
       if(data){
-        this.previousTrackes =data;
+        this.previousTracks =data;
       }
     });
   }
@@ -78,8 +78,8 @@ export class HomePage {
 
   stopTracking(){
     let newRoute ={finished:new Date().getTime(), path: this.trackedRoute};
-    this.previousTrackes.push(newRoute);
-    this.storage.set('routes',this.previousTrackes);
+    this.previousTracks.push(newRoute);
+    this.storage.set('routes',this.previousTracks);
 
     this.isTracking=false;
     this.positionSubscription.unsubscribe();
@@ -109,9 +109,8 @@ export class HomePage {
     this.geo.getCurrentPosition().then( pos =>{
       let latLng=new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
       this.map.setCenter(latLng);
+      this.addMarker(latLng, this.map);
     }).catch(err => console.log(err));
-
-    //this.addMarker(this.map.getLocation(), this.map);
 
   }
 
