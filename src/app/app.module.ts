@@ -10,12 +10,14 @@ import {Geolocation} from '@ionic-native/geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {IonicStorageModule} from '@ionic/storage';
+import {WeatherPage} from "../pages/weather/weather";
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
     HomePage,
+    WeatherPage,
     TabsPage
   ],
   imports: [
@@ -28,6 +30,7 @@ import {IonicStorageModule} from '@ionic/storage';
     MyApp,
     AboutPage,
     HomePage,
+    WeatherPage,
     TabsPage
   ],
   providers: [
