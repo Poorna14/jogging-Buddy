@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyApp</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <name>Jogging Buddy</name>
+    <description>A simple movement tracker app for jogging</description>
+    <author email="poorna.14@cse.mrt.ac.lk" href="http://ionicframework.com/">Poorna Premachandra</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -85,8 +85,8 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-      <string>This App wants to track your jogging route</string>
+        <string>This App wants to track your jogging route</string>
     </edit-config>
-    <engine name="android" spec="^7.1.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
+    <engine name="android" spec="7.1.1" />
 </widget>
