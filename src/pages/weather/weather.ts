@@ -17,7 +17,7 @@ export class WeatherPage {
 
   ionViewDidLoad() {
     this.geo.getCurrentPosition().then( pos =>{
-      this.getWeather(pos.coords.latitude,pos.coords.longitude)
+      this.getWeather(String(pos.coords.latitude),String(pos.coords.longitude))
     }).catch(err => console.log(err));
 
     console.log(this.weatherList);
