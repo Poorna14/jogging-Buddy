@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-
+import { HttpModule } from '@angular/http';
 import { AboutPage } from '../pages/about/about';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {IonicStorageModule} from '@ionic/storage';
 import {WeatherPage} from "../pages/weather/weather";
+import { WeatherServiceProvider } from '../providers/weather-service/weather-service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {WeatherPage} from "../pages/weather/weather";
     TabsPage
   ],
   imports: [
+    HttpModule,
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
@@ -37,7 +39,9 @@ import {WeatherPage} from "../pages/weather/weather";
     StatusBar,
     SplashScreen,
     Geolocation,
+    WeatherServiceProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
+
   ]
 })
 export class AppModule {}

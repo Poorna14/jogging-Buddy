@@ -1,25 +1,36 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+import {WeatherServiceProvider} from "../../providers/weather-service/weather-service";
+import {Geolocation} from '@ionic-native/geolocation';
+//import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
-/**
- * Generated class for the WeatherPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
-@IonicPage()
 @Component({
   selector: 'page-weather',
   templateUrl: 'weather.html',
 })
 export class WeatherPage {
+  public weatherList=[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public weatherProv:WeatherServiceProvider,public geo:Geolocation) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad WeatherPage');
+    this.geo.getCurrentPosition().then( pos =>{
+      this.getWeather(pos.coords.latitude,pos.coords.longitude)
+    }).catch(err => console.log(err));
+
+    console.log(this.weatherList);
   }
 
+  getWeather(lat:string,lon:string){
+    this.weatherProv.city(lat,lon)
+      .map(data=>data.json())
+      .subscribe(data=>{
+        this.weatherList.push(data);
+    },
+    err => console.log(err),
+      () =>console.log('getWeather completed'))
+
+  }
 }
