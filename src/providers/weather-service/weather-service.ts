@@ -13,7 +13,7 @@ export class WeatherServiceProvider {
       let url=this.baseUrl;
       url += 'lat=' +lat;
       url += '&lon=' +lon;
-      url += '&appId=' + this.appId;
+      url += '&units=metric&appId=' + this.appId;
 
       return this.http.get(url);
 
