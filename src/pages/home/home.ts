@@ -56,6 +56,7 @@ export class HomePage {
       setTimeout(()=>{
         this.trackedRoute.push({lat:data.coords.latitude,lng:data.coords.longitude});
         this.redrawPath(this.trackedRoute);
+        this.addMarker({lat:data.coords.latitude,lng:data.coords.longitude}, this.map);
       });
       })
   }
@@ -110,7 +111,6 @@ export class HomePage {
     this.geo.getCurrentPosition().then( pos =>{
       let latLng=new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
       this.map.setCenter(latLng);
-      this.addMarker(latLng, this.map);
     }).catch(err => console.log(err));
 
   }
