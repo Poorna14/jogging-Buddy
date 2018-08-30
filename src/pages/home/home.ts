@@ -85,7 +85,7 @@ export class HomePage {
     this.storage.set('routes',this.previousTracks);
     this.isTracking=false;
     this.positionSubscription.unsubscribe();
-    // this.currentMapTrack.setMap(null);
+    this.currentMapTrack.setMap(null);
   }
 
   showHistoryRoute(route){
