@@ -50,13 +50,17 @@ export class HomePage {
     this.trackedRoute=[];
     this.distance=0;
 
+    this.geo.getCurrentPosition().then( pos =>{
+      let latLng=new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+      this.addMarker(latLng,this.map);
+    }).catch(err => console.log(err));
+
     this.positionSubscription = this.geo.watchPosition().pipe(
       filter((p) => p.coords !== undefined)
     ).subscribe(data =>{
       setTimeout(()=>{
         this.trackedRoute.push({lat:data.coords.latitude,lng:data.coords.longitude});
         this.redrawPath(this.trackedRoute);
-        this.addMarker({lat:data.coords.latitude,lng:data.coords.longitude}, this.map);
       });
       })
   }
@@ -80,6 +84,11 @@ export class HomePage {
   }
 
   stopTracking(){
+    this.geo.getCurrentPosition().then( pos =>{
+      let latLng=new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+      this.addMarker(latLng,this.map);
+    }).catch(err => console.log(err));
+
     let newRoute ={finished:new Date().getTime(), path: this.trackedRoute, distance:this.distance};
     this.previousTracks.push(newRoute);
     this.storage.set('routes',this.previousTracks);
